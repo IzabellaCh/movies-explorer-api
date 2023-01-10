@@ -46,6 +46,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 mongoose.connect(mongoDB);
+// mongoose.set('strictQuery', false);
 
 // app.use(requestLogger);
 // app.use('/', router);
