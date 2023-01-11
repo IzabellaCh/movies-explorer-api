@@ -1,10 +1,11 @@
 const express = require('express');
 // const cors = require('cors');
-const rateLimit = require('express-rate-limit');
+// const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
+const { limiter } = require('./rateLimiter');
 
 const router = require('./routes/index');
 const { PORT, mongoDB } = require('./constants');
@@ -32,12 +33,6 @@ const app = express();
 // require('dotenv').config();
 
 // ограничение количества запросов
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standartHeaders: true,
-  legacyHeaders: true,
-});
 app.use(limiter);
 
 // настройка http-заголовков
@@ -47,7 +42,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 mongoose.connect(mongoDB);
-// mongoose.set('strictQuery', false);
 
 app.use(requestLogger);
 app.use('/', router);

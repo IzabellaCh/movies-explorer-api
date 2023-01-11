@@ -7,26 +7,16 @@ const {
   deleteMovie,
 } = require('../controllers/movies');
 
+const { movieId, movieInfo } = require('./validationConstats');
+
 movie.get('/', getMovies);
+
 movie.post('/', celebrate({
-  body: Joi.object().keys({
-    nameRU: Joi.string().required(),
-    nameEN: Joi.string().required(),
-    movieId: Joi.number().required(),
-    thumbnail: Joi.string().required().pattern(/https?:\/\/\S+\.\S+/),
-    trailerLink: Joi.string().required().pattern(/https?:\/\/\S+\.\S+/),
-    image: Joi.string().required().pattern(/https?:\/\/\S+\.\S+/),
-    description: Joi.string().required(),
-    year: Joi.string().required(),
-    duration: Joi.number().required(),
-    director: Joi.string().required(),
-    country: Joi.string().required(),
-  }),
+  body: Joi.object().keys(movieInfo),
 }), createMovie);
+
 movie.delete('/:movieId', celebrate({
-  params: Joi.object().keys({
-    movieId: Joi.string().hex(),
-  }),
+  params: Joi.object().keys(movieId),
 }), deleteMovie);
 
 module.exports = movie;

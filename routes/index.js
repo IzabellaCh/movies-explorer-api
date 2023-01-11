@@ -5,20 +5,14 @@ const user = require('./users');
 const movie = require('./movies');
 const { login, createUser, signout } = require('../controllers/users');
 const PageNotFoundError = require('../errors/pageNotFoundError');
+const { signInInfo, signUpInfo } = require('./validationConstats');
 
 router.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
+  body: Joi.object().keys(signInInfo),
 }), login);
 
 router.post('/signup', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
+  body: Joi.object().keys(signUpInfo),
 }), createUser);
 
 router.use(auth);
