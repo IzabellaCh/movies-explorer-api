@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 
-// const router = require('./routes/index');
+const router = require('./routes/index');
 const { PORT, mongoDB } = require('./constants');
 const handleError = require('./middlewares/handleError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -39,6 +39,7 @@ const limiter = rateLimit({
   legacyHeaders: true,
 });
 app.use(limiter);
+
 // настройка http-заголовков
 app.use(helmet());
 app.use(express.json());
@@ -49,7 +50,7 @@ mongoose.connect(mongoDB);
 // mongoose.set('strictQuery', false);
 
 app.use(requestLogger);
-// app.use('/', router);
+app.use('/', router);
 
 app.use(errorLogger);
 app.use(errors());
