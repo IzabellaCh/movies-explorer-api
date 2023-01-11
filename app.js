@@ -4,12 +4,12 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-// const { errors } = require('celebrate');
+const { errors } = require('celebrate');
 
 // const router = require('./routes/index');
 const { PORT, mongoDB } = require('./constants');
-// const handleError = require('./middlewares/handleError');
-// const { requestLogger, errorLogger } = require('./middlewares/logger');
+const handleError = require('./middlewares/handleError');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const app = express();
 
@@ -48,12 +48,12 @@ app.use(cookieParser());
 mongoose.connect(mongoDB);
 // mongoose.set('strictQuery', false);
 
-// app.use(requestLogger);
+app.use(requestLogger);
 // app.use('/', router);
 
-// app.use(errorLogger);
-// app.use(errors());
-// app.use(handleError);
+app.use(errorLogger);
+app.use(errors());
+app.use(handleError);
 
 app.listen(PORT, () => {
   console.log('Сервер запущен');
