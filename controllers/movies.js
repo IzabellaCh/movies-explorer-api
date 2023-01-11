@@ -29,12 +29,9 @@ const createMovie = (req, res, next) => {
   Movie.create({
     nameRU,
     nameEN,
-    // movieId: id,
     movieId,
-    // thumbnail: image.formats.thumbnail.url,
     thumbnail,
     trailerLink,
-    // image: image.url,
     image,
     description,
     year,

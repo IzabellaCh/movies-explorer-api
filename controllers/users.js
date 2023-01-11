@@ -12,24 +12,6 @@ const { JWT_SECRET_DEV } = require('../constants');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-// общая функция, используется в 2х контроллерах: getUserById, getMyProfile
-// const findUserById = (req, res, id, next) => {
-//   User.findById(id)
-//     .orFail(() => {
-//       throw new ResourceNotFoundError();
-//     })
-//     .then((user) => res.send(user))
-//     .catch((err) => {
-//       if (err.name === 'CastError') {
-//         next(new BadRequestError());
-//       } else if (err.name === 'ResourceNotFoundError') {
-//         next(new ResourceNotFoundError());
-//       } else {
-//         next(err);
-//       }
-//     });
-// };
-
 const getMyProfile = (req, res, next) => {
   const id = req.user._id;
 
@@ -48,14 +30,6 @@ const getMyProfile = (req, res, next) => {
       }
     });
 };
-
-// const getUserById = (req, res, next) => {
-//   findUserById(req, res, req.params.userId, next);
-// };
-
-// const getMyProfile = (req, res, next) => {
-//   findUserById(req, res, req.user._id, next);
-// };
 
 const createUser = (req, res, next) => {
   const {
@@ -127,9 +101,14 @@ const login = (req, res, next) => {
     });
 };
 
+const signout = (req, res) => {
+  res.clearCookie('jwt').send({ message: 'Вы успешно вышли из аккаунта' }).end();
+};
+
 module.exports = {
   createUser,
   updateProfile,
   login,
   getMyProfile,
+  signout,
 };

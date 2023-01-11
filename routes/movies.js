@@ -12,7 +12,7 @@ movie.post('/', celebrate({
   body: Joi.object().keys({
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
     thumbnail: Joi.string().required().pattern(/https?:\/\/\S+\.\S+/),
     trailerLink: Joi.string().required().pattern(/https?:\/\/\S+\.\S+/),
     image: Joi.string().required().pattern(/https?:\/\/\S+\.\S+/),
@@ -25,7 +25,7 @@ movie.post('/', celebrate({
 }), createMovie);
 movie.delete('/:movieId', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().hex(),
+    movieId: Joi.string().hex(),
   }),
 }), deleteMovie);
 
