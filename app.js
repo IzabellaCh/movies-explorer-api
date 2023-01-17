@@ -31,6 +31,9 @@ app.use('*', cors(options));
 
 require('dotenv').config();
 
+// подключеине логгера
+app.use(requestLogger);
+
 // ограничение количества запросов
 app.use(limiter);
 
@@ -41,8 +44,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 mongoose.connect(mongoDB);
-
-app.use(requestLogger);
 
 app.use('/', router);
 
