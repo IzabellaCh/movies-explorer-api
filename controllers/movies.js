@@ -1,13 +1,16 @@
-const { StatusCodes } = require('http-status-codes');
-const Movie = require('../models/movie');
-const ResourceNotFoundError = require('../errors/resourceNotFoundError');
-const NotOwnerError = require('../errors/notOwnerError');
-const BadRequestError = require('../errors/badRequestError');
+const { StatusCodes } = require("http-status-codes");
+const Movie = require("../models/movie");
+const ResourceNotFoundError = require("../errors/resourceNotFoundError");
+const NotOwnerError = require("../errors/notOwnerError");
+const BadRequestError = require("../errors/badRequestError");
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
-    .populate(['owner'])
-    .then((movies) => res.send(movies))
+  const id = req.user._id;
+  Movie.find({ owner: req.user._id })
+    .populate(["owner"])
+    .then((movies) => {
+      res.send(movies);
+    })
     .catch(next);
 };
 
@@ -42,7 +45,7 @@ const createMovie = (req, res, next) => {
   })
     .then((movie) => res.status(StatusCodes.CREATED).send(movie))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === "ValidationError") {
         next(new BadRequestError());
       } else {
         next(err);
@@ -62,15 +65,16 @@ const deleteMovie = (req, res, next) => {
       if (owner !== userId) {
         throw new NotOwnerError();
       }
-      Movie.findByIdAndRemove(movieId)
-        .then(() => res.send({ message: 'Фильм удален' }));
+      Movie.findByIdAndRemove(movieId).then(() =>
+        res.send({ message: "Фильм удален" })
+      );
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === "CastError") {
         next(new BadRequestError());
-      } else if (err.name === 'ResourceNotFoundError') {
+      } else if (err.name === "ResourceNotFoundError") {
         next(new ResourceNotFoundError());
-      } else if (err.name === 'NotOwnerError') {
+      } else if (err.name === "NotOwnerError") {
         next(new NotOwnerError());
       } else {
         next(err);
